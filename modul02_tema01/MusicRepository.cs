@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
 
 namespace modul02_tema01
 {
@@ -20,7 +20,7 @@ namespace modul02_tema01
                     Console.WriteLine(line);
                     string[] data = line.Split(',');
                     Media m = new Media(data);
-                    cachedData.Add(m.Id, m);
+                    cachedData.Add(m);
 
                 }
             }
@@ -28,14 +28,25 @@ namespace modul02_tema01
             {
                 Console.WriteLine("[!]Repo doesn't exist.");
             }
-            
+
         }
 
-        public Dictionary<int, Media> cachedData = new Dictionary<int, Media>();
+        private int GetSmallestUnusedID()
+        {
+            string[] tempParams = { "0", "0", "0", "0", "0", "0" };
+            var tempMedia = new Media(tempParams);
+            while (cachedData.Where<Media>(x => x.Id == tempMedia.Id).Count<Media>() > 0)
+            {
+                tempMedia.Id++;
+            }
+            return tempMedia.Id;
+        }
+
+        private List<Media> cachedData;
         public void Insert(Media media)
         {
-           if(!cachedData.ContainsKey(media.Id))
-                cachedData.Add(media.Id,media);
+            media.Id = GetSmallestUnusedID();
+            cachedData.Add(media);
         }
 
         public Media GetById(int id)
@@ -45,52 +56,52 @@ namespace modul02_tema01
 
         public void Delete(int id)
         {
-            if (cachedData.ContainsKey(id))
-                cachedData.Remove(id);
+            cachedData.Remove(cachedData.Where(x => x.Id == id).First());
         }
 
         public void Save(string name)
         {
-            File.WriteAllText(pathToOpen+name+".csv" , "");
+            File.WriteAllText(pathToOpen + name + ".csv", "");
             foreach (var item in cachedData)
             {
-                File.AppendAllText(pathToOpen + name + ".csv", item.Value.ToString()+'\n');
+                File.AppendAllText(pathToOpen + name + ".csv", item.ToString() + '\n');
             }
-           
+
         }
 
         public IEnumerable<Media> GetAll()
         {
-            return cachedData.Values.AsEnumerable<Media>();
+            return cachedData.AsEnumerable<Media>();
 
         }
 
         public IEnumerable<Media> GetByArtist(string artist)
         {
-            return cachedData.Values.Where(x => x.Artist.Equals(artist));
+            return cachedData.Where(x => x.Artist == artist);
         }
 
         public IEnumerable<Media> GetByYear(int year)
         {
-            return cachedData.Values.Where(x => x.Year == year).Select(x => x);
+            return cachedData.Where(x => x.Year == year);
         }
         public IEnumerable<Media> GetBySales(bool isOnSale)
         {
-            return cachedData.Values.Where(x => x.Sales == isOnSale);
+            return cachedData.Where(x => x.Sales == isOnSale);
         }
 
         public IEnumerable<Media> GetByTitle(string title)
         {
-            return cachedData.Values.Where(x => x.Title.Equals(title));
+            return cachedData.Where(x => x.Title == title);
         }
 
         public IEnumerable<Media> GetByGenre(string genre)
         {
-            return cachedData.Values.Where(x => string.Compare(genre, x.Genre)==0);
+            return cachedData.Where(x => x.Genre == genre);
         }
 
         public void Update(int id, string field, string value)
         {
+
             switch (field)
             {
                 case "year": cachedData[id].Year = Convert.ToInt32(value); break;

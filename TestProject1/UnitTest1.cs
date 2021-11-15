@@ -10,8 +10,8 @@ namespace TestProject1
         [TestMethod]
         public void TestCreation()
         {
-            
-            testRepo= new MusicRepository("non existent");
+
+            testRepo = new MusicRepository("non existent");
             testRepo = new MusicRepository("media");
         }
 

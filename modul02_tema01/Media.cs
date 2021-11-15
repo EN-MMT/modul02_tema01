@@ -7,11 +7,13 @@ namespace modul02_tema01
         public Media(string[] data)
         {
             try
-            { Id = Convert.ToInt32(data[0]); 
-            }catch
+            {
+                Id = Convert.ToInt32(data[0]);
+            }
+            catch
             {
                 Console.WriteLine("[!]Bad ID.");
-                return; 
+                return;
             }
             Artist = data[1];
             Title = data[2];
@@ -41,6 +43,6 @@ namespace modul02_tema01
         public string Genre { get; set; }
         public bool Sales { get; set; }
 
-        public override string ToString(){ return $"{Id},{Artist},{Title},{Year},{Genre},{Sales}"; }
+        public override string ToString() { return $"{Id},{Artist},{Title},{Year},{Genre},{Sales}"; }
     }
 }
