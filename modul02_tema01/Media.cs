@@ -4,6 +4,9 @@ namespace modul02_tema01
 {
     public class Media
     {
+        public Media() 
+        { 
+        }
         public Media(string[] data)
         {
             try

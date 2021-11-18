@@ -2,33 +2,41 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace modul02_tema01
 {
-    public class MusicRepository : IRepository
+    public class MusicRepositoryXML : IRepository
     {
         string pathToOpen = @"../../../../";
-        public MusicRepository(string openName)
+
+        public MusicRepositoryXML(string openName)
         {
             cachedData = new List<Media>();
+
             try
             {
-                var lines = File.ReadLines(pathToOpen + openName + ".csv");
-
-                foreach (var line in lines)
+                var albumsDictionary = XDocument.Load(pathToOpen + openName + ".xml").Root.Elements().Select(y => y.Elements().ToDictionary(x => x.Name, x => x.Value)).ToArray();
+                foreach (var albumElem in albumsDictionary)
                 {
-                    Console.WriteLine(line);
-                    string[] data = line.Split(',');
-                    Media m = new Media(data);
-                    cachedData.Add(m);
-
+                    cachedData.Add(new Media(new string[]
+                    {
+                    albumElem["id"],
+                    albumElem["artist"],
+                    albumElem["title"],
+                    albumElem["year"],
+                    albumElem["genre"],
+                    albumElem["sales"]
+                    }));
                 }
             }
+
             catch
             {
-                Console.WriteLine("[!]Repo doesn't exist.");
+                Console.WriteLine("Repo not found. Creating one now.");
             }
-
+            
         }
 
         private int GetSmallestUnusedID()
@@ -61,12 +69,12 @@ namespace modul02_tema01
 
         public void Save(string name)
         {
-            File.WriteAllText(pathToOpen + name + ".csv", "");
-            foreach (var item in cachedData)
-            {
-                File.AppendAllText(pathToOpen + name + ".csv", item.ToString() + '\n');
-            }
 
+            XmlSerializer inst = new XmlSerializer(typeof(Media[]));
+            TextWriter writer = new StreamWriter(pathToOpen + name + ".xml");
+            inst.Serialize(writer, cachedData.ToArray());
+            writer.Write(inst);
+            writer.Close();
         }
 
         public IEnumerable<Media> GetAll()

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+  <row-0>
+    <id>1</id>
+    <artist>evil salam</artist>
+    <title>melodia1</title>
+    <year>2006</year>
+    <genre>nu manele</genre>
+    <sales>true</sales>
+  </row-0>
+  <row-1>
+    <id>2</id>
+    <artist>sfantul andrei</artist>
+    <title>pact cu diavolul</title>
+    <year>20</year>
+    <genre>cantece bisericesti</genre>
+    <sales>false</sales>
+  </row-1>
+  <row-2>
+    <id>3</id>
+    <artist>x</artist>
+    <title>y</title>
+    <year>20</year>
+    <genre>z</genre>
+    <sales>true</sales>
+  </row-2>
+</root>
