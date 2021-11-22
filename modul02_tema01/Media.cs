@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Xml.Serialization;
 
 namespace modul02_tema01
 {
+    [Serializable]
+    [XmlType("Media")]
     public class Media
     {
         public Media() 
@@ -39,11 +42,17 @@ namespace modul02_tema01
                 Sales = false;
             }
         }
+        [XmlElement("Id")]
         public int Id { get; set; }
+        [XmlElement("Artist")]
         public string Artist { get; set; }
+        [XmlElement("Title")]
         public string Title { get; set; }
+        [XmlElement("Year")]
         public int Year { get; set; }
+        [XmlElement("Genre")]
         public string Genre { get; set; }
+        [XmlElement("Sales")]
         public bool Sales { get; set; }
 
         public override string ToString() { return $"{Id},{Artist},{Title},{Year},{Genre},{Sales}"; }

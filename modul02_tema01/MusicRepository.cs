@@ -31,21 +31,15 @@ namespace modul02_tema01
 
         }
 
-        private int GetSmallestUnusedID()
+        private int GetNextAvailableID()
         {
-            string[] tempParams = { "0", "0", "0", "0", "0", "0" };
-            var tempMedia = new Media(tempParams);
-            while (cachedData.Where<Media>(x => x.Id == tempMedia.Id).Count<Media>() > 0)
-            {
-                tempMedia.Id++;
-            }
-            return tempMedia.Id;
+            return cachedData.Max<Media>(x => x.Id) + 1;
         }
 
         private List<Media> cachedData;
         public void Insert(Media media)
         {
-            media.Id = GetSmallestUnusedID();
+            media.Id = GetNextAvailableID();
             cachedData.Add(media);
         }
 

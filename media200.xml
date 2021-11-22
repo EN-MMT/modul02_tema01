@@ -24,4 +24,4 @@
     <Genre>z</Genre>
     <Sales>true</Sales>
   </Media>
-</ArrayOfMedia>System.Xml.Serialization.XmlSerializer
+</ArrayOfMedia>

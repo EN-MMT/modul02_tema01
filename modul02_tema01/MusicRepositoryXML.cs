@@ -15,9 +15,26 @@ namespace modul02_tema01
         {
             cachedData = new List<Media>();
 
+            
+                //var albumsDictionary = XDocument.Load(pathToOpen + openName + ".xml").Root.Elements().Select(y => y.Elements().ToDictionary(x => x.Name, x => x.Value)).ToArray();
+                var serializer = new XmlSerializer(typeof(List<Media>), new XmlRootAttribute("ArrayOfMedia"));
+            //var albumSerializer = new XmlSerializer(typeof(List<Media>));
+
+               // var albums= XDocument.Load(pathToOpen + openName + ".xml").Element("ArrayOfMedia").Elements();
+            /*
+            foreach(var album in albums)
+            {
+                Media m = new Media();
+                albumSerializer.Serialize(album., m);
+            }
+            */
             try
             {
-                var albumsDictionary = XDocument.Load(pathToOpen + openName + ".xml").Root.Elements().Select(y => y.Elements().ToDictionary(x => x.Name, x => x.Value)).ToArray();
+                using (var tw = new FileStream(pathToOpen + openName + ".xml",FileMode.Open))
+                {
+                    cachedData = (List<Media>)serializer.Deserialize(tw );
+                }
+                /*
                 foreach (var albumElem in albumsDictionary)
                 {
                     cachedData.Add(new Media(new string[]
@@ -29,31 +46,25 @@ namespace modul02_tema01
                     albumElem["genre"],
                     albumElem["sales"]
                     }));
-                }
+                }*/
             }
 
-            catch
+            catch(Exception exp)
             {
-                Console.WriteLine("Repo not found. Creating one now.");
+                Console.WriteLine(exp.Message);
             }
             
         }
 
-        private int GetSmallestUnusedID()
+        private int GetNextAvailableID()
         {
-            string[] tempParams = { "0", "0", "0", "0", "0", "0" };
-            var tempMedia = new Media(tempParams);
-            while (cachedData.Where<Media>(x => x.Id == tempMedia.Id).Count<Media>() > 0)
-            {
-                tempMedia.Id++;
-            }
-            return tempMedia.Id;
+            return cachedData.Max<Media>(x => x.Id )+1;
         }
 
         private List<Media> cachedData;
         public void Insert(Media media)
         {
-            media.Id = GetSmallestUnusedID();
+            media.Id = GetNextAvailableID();
             cachedData.Add(media);
         }
 
